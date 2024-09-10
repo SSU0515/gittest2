@@ -1,11 +1,13 @@
-import React from 'react'
-import styled from 'styled-components'
-import TopBanner from '../components/main/top/TopBanner'
-import Top from '../components/main/top/Top'
-import Middle from '../components/main/middle/Middle'
-import MiddleSecond from '../components/main/middle/MiddleSecond'
-import Video from '../components/main/bottom/Video'
-import Bottom from '../components/main/bottom/Bottom'
+import React, { Suspense } from 'react';
+import styled from 'styled-components';
+
+// 컴포넌트를 동적으로 로드 (lazy loading)
+const TopBanner = React.lazy(() => import('../components/main/top/TopBanner'));
+const Top = React.lazy(() => import('../components/main/top/Top'));
+const Middle = React.lazy(() => import('../components/main/middle/Middle'));
+const MiddleSecond = React.lazy(() => import('../components/main/middle/MiddleSecond'));
+const Video = React.lazy(() => import('../components/main/bottom/Video'));
+const Bottom = React.lazy(() => import('../components/main/bottom/Bottom'));
 
 const Container = styled.div`
   width: 100vw;
@@ -13,18 +15,21 @@ const Container = styled.div`
   overflow-x: hidden;
 `;
 
+const LoadingMessage = () => <div>Loading...</div>;
 
 const Landing = () => {
   return (
     <Container>
-    <TopBanner />
-    <Top />
-    <Middle />
-    <MiddleSecond />
-    <Video />
-    <Bottom />
-  </Container>
-  )
+      <Suspense fallback={<LoadingMessage />}>
+        <TopBanner />
+        <Top />
+        <Middle />
+        <MiddleSecond />
+        <Video />
+        <Bottom />
+      </Suspense>
+    </Container>
+  );
 }
 
-export default Landing
+export default Landing;

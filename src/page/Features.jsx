@@ -1,35 +1,37 @@
-import React from 'react'
-import { useEffect } from 'react'
-import styled from 'styled-components'
-import Music from '../components/features/Music'
-import Demo from '../components/features/Demo'
-import Detection from '../components/features/Detection'
-import Healthcare from '../components/features/Healthcare'
+import React, { useEffect, Suspense } from 'react';
+import styled from 'styled-components';
 
-const Container =styled.div`
+// lazy loading을 위한 동적 import
+const Music = React.lazy(() => import('../components/features/Music'));
+const Demo = React.lazy(() => import('../components/features/Demo'));
+const Detection = React.lazy(() => import('../components/features/Detection'));
+const Healthcare = React.lazy(() => import('../components/features/Healthcare'));
+
+const Container = styled.div`
   width: 100vw;
   height: 100%;
   position: relative;
   overflow: hidden;
   background-color: #000;
-`
+`;
 
-
+const LoadingMessage = () => <div>Loading...</div>;
 
 const Features = () => {
   useEffect(() => {
-    window.scrollTo(0, 0); 
+    window.scrollTo(0, 0);
   }, []);
 
   return (
     <Container>
-      <Music />
-      <Detection />
+      <Suspense fallback={<LoadingMessage />}>
+        <Music />
+        <Detection />
+        <Demo />
+        <Healthcare />
+      </Suspense>
+    </Container>
+  );
+};
 
-      <Demo />
-      <Healthcare />
-      </Container>
-  )
-}
-
-export default Features
+export default Features;
